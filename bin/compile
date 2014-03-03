@@ -5,7 +5,7 @@
 set -e
 
 # Debug
-# set -x
+set -x
 
 # Clean up leaking environment
 unset GIT_DIR
@@ -14,10 +14,6 @@ unset GIT_DIR
 BUILD_DIR=$1
 CACHE_DIR=$2
 
-# Setup profile file
-PROFILE_PATH="$BUILD_DIR/.profile.d/geo.sh"
-mkdir -p $(dirname $PROFILE_PATH)
-
 # Functions
 function indent() {
   c='s/^/       /'
@@ -25,20 +21,6 @@ function indent() {
     Darwin) sed -l "$c";;
     *)      sed -u "$c";;
   esac
-}
-
-function manifest_version() {
-  curl "http://${S3_BUCKET}.s3.amazonaws.com/manifest.${1}" -s -o - | head -n 1
-}
-
-function download_package() {
-  name="$1"
-  version="$2"
-  location="$3"
-
-  mkdir -p $location
-  package="https://${S3_BUCKET}.s3.amazonaws.com/$name-$version.tgz"
-  curl $package -s -o - | tar xzf - -C $location
 }
 
 function set-env (){
