@@ -73,8 +73,12 @@ fi
 # BUNDLE_DISABLE_SHARED_GEMS: '1'
 # " > $BUILD_DIR/.bundle/config
 
+# libffi support.
+source $BIN_DIR/steps/libffi
+
+
 set-default-env LIBRARY_PATH "$APP_SPOTIFY/lib"
-set-default-env LD_LIBRARY_PATH "$APP_SPOTIFY/lib"
+set-default-env LD_LIBRARY_PATH "$APP_SPOTIFY/lib:/app/vendor/libffi-3.0/lib"
 set-default-env CPATH "$APP_SPOTIFY/include"
 
 echo "-----> Vendoring libspotify library done"
