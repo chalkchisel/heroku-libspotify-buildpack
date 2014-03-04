@@ -33,7 +33,7 @@ function set-env (){
 }
 
 function set-default-env (){
-  echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
+  echo "export $1=\${$1:$2}" >> $PROFILE_PATH
 }
 
 # Retrieve versions
