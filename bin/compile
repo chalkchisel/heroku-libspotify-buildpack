@@ -33,7 +33,6 @@ function set-env (){
 }
 
 function set-default-env (){
-  echo "export $1=\${$1:-$2}"
   echo "export $1=\${$1:-$2}" >> $PROFILE_PATH
 }
 
