@@ -74,7 +74,7 @@ fi
 # " > $BUILD_DIR/.bundle/config
 
 # libffi support.
-source $BIN_DIR/steps/libffi
+source `dirname $0`/steps/libffi
 
 
 set-default-env LIBRARY_PATH "$APP_SPOTIFY/lib"
