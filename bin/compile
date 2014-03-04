@@ -38,30 +38,47 @@ function set-default-env (){
 
 # Retrieve versions
 LIBSPOTIFY_VERSION=12.1.51
+LIBFFI_VERSION=3.0
 
 # Display some information
 echo "Using libspotify version: ${LIBSPOTIFY_VERSION}" | indent
+echo "Using libffi version: ${LIBFFI_VERSION}" | indent
 
 # Vendor directories
 VENDORED_LIBSPOTIFY="vendor/libspotify/$LIBSPOTIFY_VERSION"
+VENDORED_LIBFFI="vendor/libffi/$LIBFFI_VERSION"
 
 if [ ! -d $CACHE_DIR/$VENDORED_LIBSPOTIFY ]; then
-  echo "-----> Fetching and vendoring geos"
+  echo "-----> Fetching and vendoring libspotify"
   rm -rf "$CACHE_DIR/vendor/libspotify"
   mkdir -p $CACHE_DIR/$VENDORED_LIBSPOTIFY
   tar -xzf `dirname $0`/../vendor/libspotify-$LIBSPOTIFY_VERSION.tar.gz -C $CACHE_DIR/$VENDORED_LIBSPOTIFY
 fi
 
+if [ ! -d $CACHE_DIR/$VENDORED_LIBFFI ]; then
+  echo "-----> Fetching and vendoring libffi"
+  rm -rf "$CACHE_DIR/vendor/libffi"
+  mkdir -p $CACHE_DIR/$VENDORED_LIBFFI
+
+  curl -s -L -o tmp-libffi.tar.gz "https://s3-us-west-2.amazonaws.com/mfenniak-graphviz/libffi-3.0.tgz"
+  tar -zxvf tmp-libffi.tar.gz -C $CACHE_DIR/$VENDORED_LIBFFI
+  rm tmp-libffi.tar.gz
+fi
+
 # Copy artifacts out of cache if exists.
 mkdir -p $CACHE_DIR
 mkdir -p $BUILD_DIR/$VENDORED_LIBSPOTIFY
+mkdir -p $BUILD_DIR/$VENDORED_LIBFFI
 cp -r $CACHE_DIR/$VENDORED_LIBSPOTIFY/* $BUILD_DIR/$VENDORED_LIBSPOTIFY &> /dev/null || true
+cp -r $CACHE_DIR/$VENDORED_LIBFFI/* $BUILD_DIR/$VENDORED_LIBFFI &> /dev/null || true
 
 # App directories
 APP_SPOTIFY="/app/$VENDORED_LIBSPOTIFY"
+APP_LIBFFI="/app/$VENDORED_LIBFFI"
 
 # Setup environment variables
 set-env SPOTIFY_LIBRARY_PATH "$APP_SPOTIFY/lib"
+set-env SPOTIFY_LIBRARY_PATH "$APP_LIBFFI/lib"
 
 # Bundle workaround
 mkdir -p $BUILD_DIR/.bundle
@@ -78,16 +95,11 @@ fi
 # BUNDLE_DISABLE_SHARED_GEMS: '1'
 # " > $BUILD_DIR/.bundle/config
 
-echo "-----> Installing libffi"
 
-# libffi support.
-source $BIN_DIR/steps/libffi
-
-echo "-----> Libffi installed"
-
-
+set-default-env PKG_CONFIG_PATH "$APP_LIBFFI/lib/pkgconfig/"
 set-default-env LIBRARY_PATH "$APP_SPOTIFY/lib:/app/vendor/libffi-3.0/lib"
 set-default-env LD_LIBRARY_PATH "$APP_SPOTIFY/lib:/app/vendor/libffi-3.0/lib"
 set-default-env CPATH "$APP_SPOTIFY/include"
 
+echo "-----> Vendoring libffi library done"
 echo "-----> Vendoring libspotify library done"
