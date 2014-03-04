@@ -86,7 +86,7 @@ source $BIN_DIR/steps/libffi
 echo "-----> Libffi installed"
 
 
-set-default-env LIBRARY_PATH "$APP_SPOTIFY/lib"
+set-default-env LIBRARY_PATH "$APP_SPOTIFY/lib:/app/vendor/libffi-3.0/lib"
 set-default-env LD_LIBRARY_PATH "$APP_SPOTIFY/lib:/app/vendor/libffi-3.0/lib"
 set-default-env CPATH "$APP_SPOTIFY/include"
 
