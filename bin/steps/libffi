@@ -21,6 +21,9 @@ curl -s -L -o tmp-libffi.tar.gz $VENDORED_LIBFFI
 tar -zxvf tmp-libffi.tar.gz > /dev/null
 rm tmp-libffi.tar.gz
 
+echo $(pwd)
+ls -lah .
+
 # Add libffi's to PKG_CONFIG_PATH
 
 set-default-env PKG_CONFIG_PATH "$(pwd)/lib/pkgconfig/"
