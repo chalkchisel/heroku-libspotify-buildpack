@@ -11,6 +11,8 @@ set -x
 unset GIT_DIR
 
 # Parameters
+BIN_DIR=$(cd $(dirname $0); pwd)
+ROOT_DIR=$(dirname $BIN_DIR)
 BUILD_DIR=$1
 CACHE_DIR=$2
 
@@ -73,8 +75,12 @@ fi
 # BUNDLE_DISABLE_SHARED_GEMS: '1'
 # " > $BUILD_DIR/.bundle/config
 
+echo "-----> Installing libffi"
+
 # libffi support.
-source `dirname $0`/steps/libffi
+source $BIN_DIR/steps/libffi
+
+echo "-----> Libffi installed"
 
 
 set-default-env LIBRARY_PATH "$APP_SPOTIFY/lib"
