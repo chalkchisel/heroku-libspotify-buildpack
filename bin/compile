@@ -78,7 +78,7 @@ APP_LIBFFI="/app/$VENDORED_LIBFFI"
 
 # Setup environment variables
 set-env SPOTIFY_LIBRARY_PATH "$APP_SPOTIFY/lib"
-set-env SPOTIFY_LIBRARY_PATH "$APP_LIBFFI/lib"
+set-env LIBFFI_LIBRARY_PATH "$APP_LIBFFI/lib"
 
 # Bundle workaround
 mkdir -p $BUILD_DIR/.bundle
@@ -96,10 +96,10 @@ fi
 # " > $BUILD_DIR/.bundle/config
 
 
-set-default-env PKG_CONFIG_PATH "$APP_LIBFFI/lib/pkgconfig/"
-set-default-env LIBRARY_PATH "$APP_SPOTIFY/lib:/app/vendor/libffi-3.0/lib"
-set-default-env LD_LIBRARY_PATH "$APP_SPOTIFY/lib:/app/vendor/libffi-3.0/lib"
-set-default-env CPATH "$APP_SPOTIFY/include"
+set-default-env PKG_CONFIG_PATH "$APP_LIBFFI/lib/pkgconfig"
+set-default-env LIBRARY_PATH "$APP_SPOTIFY/lib:$APP_LIBFFI/lib"
+set-default-env LD_LIBRARY_PATH "$APP_SPOTIFY/lib:$APP_LIBFFI/lib"
+set-default-env CPATH "$APP_SPOTIFY/include:$APP_LIBFFI/lib/libffi-3.0.13/include"
 
 echo "-----> Vendoring libffi library done"
 echo "-----> Vendoring libspotify library done"
